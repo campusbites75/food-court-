@@ -1,0 +1,350 @@
+/* ================= NAVBAR ================= */
+
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    padding: 18px 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.navbar.scrolled {
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+.navbar .logo {
+    width: 150px;
+    transition: 0.3s ease;
+}
+
+/* ================= MENU ================= */
+
+.navbar-menu {
+    display: flex;
+    list-style: none;
+    gap: 28px;
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.navbar-menu li {
+    position: relative;
+}
+
+.navbar-menu li a {
+    color: #49557E;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+.navbar-menu li a::after {
+    content: "";
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    left: 0;
+    bottom: -6px;
+    background: linear-gradient(135deg, #ff7a18, #ffb347);
+    transition: 0.3s ease;
+}
+
+.navbar-menu li a:hover::after {
+    width: 100%;
+}
+
+.navbar-menu li a:hover {
+    color: #ff7a18;
+}
+
+.navbar-menu .active {
+    color: #ff7a18;
+}
+
+/* ================= RIGHT SECTION ================= */
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* ================= KITCHEN STATUS ================= */
+
+.kitchen-status {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.kitchen-status.open {
+    background: #e6f9ed;
+    color: #1b8a3e;
+}
+
+.kitchen-status.closed {
+    background: #fdecea;
+    color: #d93025;
+}
+
+/* ================= MOBILE STATUS BAR ================= */
+
+.kitchen-status-mobile {
+    display: none;
+    width: 100%;
+    text-align: center;
+    padding: 8px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.kitchen-status-mobile.open {
+    background: #e6f9ed;
+    color: #1b8a3e;
+}
+
+.kitchen-status-mobile.closed {
+    background: #fdecea;
+    color: #d93025;
+}
+
+/* ================= CART ================= */
+
+.navbar-search-icon {
+    position: relative;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.navbar-search-icon:hover {
+    transform: scale(1.1);
+}
+
+.navbar-search-icon .dot {
+    position: absolute;
+    min-width: 10px;
+    min-height: 10px;
+    background-color: #FF4C24;
+    border-radius: 50%;
+    top: -8px;
+    right: -8px;
+}
+
+/* ================= ADMIN BUTTON ================= */
+
+.admin-btn {
+    background: #f5f5f5;
+    font-size: 14px;
+    color: #555;
+    border: 1px solid #e0e0e0;
+    padding: 7px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.admin-btn:hover {
+    background: #fff4f0;
+    color: #ff7a18;
+    border-color: #ff7a18;
+}
+
+/* ================= SIGN IN BUTTON ================= */
+
+.signin-btn {
+    background: linear-gradient(135deg, #ff7a18, #ffb347);
+    color: white;
+    font-size: 14px;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(255, 122, 24, 0.25);
+}
+
+.signin-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 122, 24, 0.35);
+}
+
+.signin-btn:active {
+    transform: translateY(0px);
+}
+
+/* ================= PROFILE ================= */
+
+.navbar-profile {
+    position: relative;
+    cursor: pointer;
+}
+
+.navbar-profile img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: 0.3s ease;
+}
+
+.navbar-profile img:hover {
+    transform: scale(1.08);
+}
+
+.navbar-profile-dropdown {
+    position: absolute;
+    right: 0;
+    top: 45px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #fff;
+    padding: 15px 25px;
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    list-style: none;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease;
+}
+
+.navbar-profile-dropdown li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.navbar-profile-dropdown li:hover {
+    color: #ff7a18;
+}
+
+.navbar-profile-dropdown img {
+    width: 18px;
+}
+
+.navbar-profile hr {
+    background-color: #eee;
+    height: 1px;
+    border: none;
+}
+
+.navbar-profile-dropdown li:first-child {
+    cursor: default;
+    font-size: 14px;
+    color: #333;
+}
+
+.navbar-profile-dropdown li:first-child p {
+    margin: 0;
+    font-weight: 600;
+}
+
+/* ================= ADMIN POPUP ================= */
+
+.admin-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+    animation: fadeIn 0.2s ease;
+}
+
+.admin-modal {
+    background: white;
+    padding: 35px;
+    border-radius: 18px;
+    width: 340px;
+    text-align: center;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+}
+
+.admin-modal h3 {
+    margin-bottom: 15px;
+}
+
+.admin-modal input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.admin-enter-btn {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, #ff7a18, #ffb347);
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.admin-cancel-btn {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    background: #ddd;
+    cursor: pointer;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 750px) {
+    .navbar-menu {
+        display: none;
+    }
+
+    .kitchen-status {
+        display: none; /* hide desktop badge */
+    }
+
+    .kitchen-status-mobile {
+        display: block; /* show mobile bar */
+    }
+
+    .navbar-right {
+        gap: 10px;
+    }
+
+    .admin-btn {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    .signin-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+}
+
+/* ================= ANIMATION ================= */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

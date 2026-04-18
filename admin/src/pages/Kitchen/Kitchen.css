@@ -1,0 +1,120 @@
+.kitchen-page {
+  padding: 28px 32px;
+  width: 100%;
+}
+
+.kitchen-title {
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+.kitchen-empty {
+  color: #777;
+  font-size: 15px;
+}
+
+.kitchen-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.kitchen-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 18px 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid #eee;
+  transition: 0.2s ease;
+}
+
+.kitchen-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+}
+
+.kitchen-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.badge-pos {
+  background: #fff3cd;
+  color: #b58900;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge-online {
+  background: #d1f7e3;
+  color: #1e8b4d;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.order-id {
+  font-size: 12px;
+  color: #777;
+}
+
+.kitchen-items h4 {
+  margin-bottom: 6px;
+  font-size: 15px;
+}
+
+.kitchen-items ul {
+  padding-left: 18px;
+  font-size: 14px;
+  margin-bottom: 14px;
+}
+
+.kitchen-items li {
+  margin-bottom: 3px;
+}
+
+.kitchen-btn {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background: #2ecc71;
+  color: white;
+  font-size: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.kitchen-btn:hover {
+  background: #27ae60;
+}
+/* ===== Special Instructions (Kitchen Screen) ===== */
+.kitchen-instructions-box {
+  margin-top: 12px;
+  background: #fff7ed;
+  border-left: 5px solid #f97316;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.kitchen-instructions-header {
+  font-size: 13px;
+  font-weight: 700;
+  color: #9a3412;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.kitchen-instructions-text {
+  font-size: 14px;
+  color: #431407;
+  line-height: 1.4;
+  word-break: break-word;
+}

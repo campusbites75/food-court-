@@ -1,0 +1,29 @@
+.static-page {
+  width: 80%;
+  margin: 80px auto;
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.05);
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.static-page h1 {
+  margin-bottom: 20px;
+  color: #ff7a18;
+}
+
+.static-page h3 {
+  margin-top: 25px;
+  margin-bottom: 10px;
+}
+
+.static-page p {
+  line-height: 1.7;
+  margin-bottom: 15px;
+}
+
+.static-page ul {
+  margin-left: 20px;
+  line-height: 1.6;
+}

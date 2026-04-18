@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: Outfit, sans-serif;
+}
+
+body{
+  min-height: 100vh;
+  background-color: #FCFCFC;
+}
+
+a{
+  text-decoration: none;
+  color: inherit;
+}
+
+hr{
+  border: none;
+  height: 1px;
+  background-color: #A9A9A9;
+}
+
+.app-content{
+  display: flex;
+}
+
+.flex-col{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cursor{
+  cursor: pointer;
+}
+
+/* ===========================================
+   ⭐ MODERN ADMIN LAYOUT UPGRADE
+   =========================================== */
+
+.admin-layout {
+  display: flex;
+  width: 100%;
+  height: auto;
+}
+
+.admin-content {
+  flex: 1;
+  padding: 24px 32px;
+  background: #f8f9fb;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Smooth Scroll */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #eaeaea;
+}
+::-webkit-scrollbar-thumb {
+  background: #c3c3c3;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

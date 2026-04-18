@@ -1,0 +1,437 @@
+/* --- GENERAL PAGE LAYOUT --- */
+.orders-page {
+  padding: 16px 22px;
+  width: 100%;
+}
+
+.orders-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+/* --- SECTIONS --- */
+.orders-section {
+  background: white;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 18px;
+  border: 1px solid #eee;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.section-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* --- TABLE WRAPPER --- */
+.orders-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* --- CONSISTENT TABLE LAYOUT --- */
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.orders-table th,
+.orders-table td {
+  padding: 8px 10px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.orders-table th {
+  font-weight: 600;
+  background: #fafafa;
+  border-bottom: 2px solid #e5e5e5;
+}
+
+.orders-table tbody tr {
+  border-bottom: 1px solid #efefef;
+  transition: background 0.15s;
+}
+
+.orders-table tbody tr:hover {
+  background: #f8f8f8;
+}
+
+
+/* --- COMPACT COLUMN WIDTHS --- */
+
+.orders-table th:nth-child(1),
+.orders-table td:nth-child(1) { width: 12%; } /* Order ID */
+
+.orders-table th:nth-child(2),
+.orders-table td:nth-child(2) { width: 18%; } /* Items */
+
+.orders-table th:nth-child(3),
+.orders-table td:nth-child(3) { width: 18%; } /* Customer */
+
+.orders-table th:nth-child(4),
+.orders-table td:nth-child(4) { width: 14%; } /* Amount */
+
+.orders-table th:nth-child(5),
+.orders-table td:nth-child(5) { width: 14%; } /* Status */
+
+.orders-table th:nth-child(6),
+.orders-table td:nth-child(6) { width: 24%; } /* Action */
+/* --- STATUS BADGES --- */
+
+.status-pill {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.status-prepared {
+  background: #e7efff;
+  color: #2b6edb;
+}
+
+.status-processing,
+.status-pending {
+  background: #fff4d3;
+  color: #aa7100;
+}
+
+.status-rejected {
+  background: #ffe5e5;
+  color: #d33;
+}
+
+.status-delivered {
+  background: #e7f8ef;
+  color: #1e9957;
+}
+
+
+/* --- ACTION BUTTONS --- */
+
+.action-buttons {
+  display: flex;
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+
+.btn-small {
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-size: 13px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-accept {
+  background: #27ae60;
+  color: white;
+}
+
+.btn-accept:hover {
+  background: #1f8e4d;
+}
+
+.btn-reject {
+  background: #e74c3c;
+  color: white;
+}
+
+.btn-reject:hover {
+  background: #c0392b;
+}
+
+.btn-delivered {
+  background: #2563eb;
+  color: white;
+}
+
+.btn-delivered:hover {
+  background: #1e40af;
+}
+
+
+/* --- MODAL OVERLAY --- */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* --- MODAL --- */
+
+.modal.fancy-modal {
+  width: 420px;
+  max-width: 95%;
+  max-height: 85vh;
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: white;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 14px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.modal-section {
+  margin-bottom: 12px;
+}
+
+.modal-section h4 {
+  margin-bottom: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.modal-section p {
+  margin: 0;
+  font-size: 13px;
+  color: #111827;
+}
+
+.instructions-box {
+  background: #fff7ed;
+  border-left: 4px solid #f97316;
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+
+/* --- MODAL FOOTER --- */
+
+.modal-footer {
+  padding: 10px 14px;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-secondary {
+  background: #e5e7eb;
+  color: #111827;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: #d1d5db;
+}
+
+
+/* =====================================================
+   POS TABLE — FIXED & CLEAN
+   ===================================================== */
+
+.pos-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+/* ALIGN TEXT PROPERLY (IMPORTANT) */
+.pos-table th,
+.pos-table td {
+  padding: 10px 12px;
+  font-size: 14px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+/* FIX COLUMN WIDTHS AFTER REMOVING 2 COLUMNS */
+
+.pos-table th:nth-child(1),
+.pos-table td:nth-child(1) { width: 15%; } /* Order ID */
+
+.pos-table th:nth-child(2),
+.pos-table td:nth-child(2) { width: 25%; } /* Items */
+
+.pos-table th:nth-child(3),
+.pos-table td:nth-child(3) { width: 20%; } /* Customer */
+
+.pos-table th:nth-child(4),
+.pos-table td:nth-child(4) { width: 15%; } /* Order Type */
+
+.pos-table th:nth-child(5),
+.pos-table td:nth-child(5) { width: 10%; } /* Status */
+
+.pos-table th:nth-child(6),
+.pos-table td:nth-child(6) { width: 15%; } /* Action */
+
+
+/* CUSTOMER CELL CLEAN LOOK */
+.customer-cell {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+
+.customer-cell small {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+/* CAPITALIZE TEXT */
+.text-cap {
+  text-transform: capitalize;
+}
+
+
+/* FIX ITEMS WRAPPING */
+.pos-table td:nth-child(2) {
+  max-width: 220px;
+  white-space: normal;
+  word-break: break-word;
+}
+
+
+/* FIX ACTION BUTTON ALIGNMENT */
+.pos-actions-fixed {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+
+/* BUTTON STYLES CLEANUP */
+
+.btn-pay {
+  background-color: #0ea5e9;
+  color: white;
+  border: none;
+}
+
+.btn-pay:hover {
+  background-color: #0284c7;
+}
+
+.btn-prepared {
+  background-color: #6f42c1;
+  color: white;
+}
+
+.btn-prepared:hover {
+  background-color: #5a32a3;
+}
+
+
+/* REMOVE OLD DUPLICATE RULES */
+.action-buttons {
+  display: flex;
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+
+
+/* =====================================================
+   QR MODAL FIX (IMPORTANT)
+   ===================================================== */
+
+/* DO NOT BREAK OTHER MODALS */
+.modal-body {
+  padding: 14px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* ONLY CENTER QR MODAL CONTENT */
+.qr-modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* QR CANVAS STYLE */
+.qr-modal-body canvas {
+  padding: 10px;
+  background: white;
+  border-radius: 8px;
+}
+
+
+/* =====================================================
+   ITEMS LIST
+   ===================================================== */
+
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 14px;
+}
+.payment-pill {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.payment-pill:contains("CASH") {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.payment-pill:contains("PAID") {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+.payment-pill {
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  background-color: #dcfce7;
+  color: #166534;
+}

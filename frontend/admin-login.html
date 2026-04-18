@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Login</title>
+</head>
+
+<body style="font-family:Arial; text-align:center; padding-top:100px;">
+  <h2>Enter Admin Access Code</h2>
+
+  <input 
+    id="code" 
+    type="text" 
+    placeholder="Access code"
+    style="padding:10px; width:250px; font-size:16px;"
+  >
+  <br><br>
+
+  <button
+    id="login-btn"
+    style="padding:10px 20px; background:black; color:white; border-radius:6px; cursor:pointer;">
+    Enter
+  </button>
+
+  <p id="msg" style="color:red;"></p>
+
+  <script>
+    document.getElementById("login-btn").addEventListener("click", async () => {
+      const code = document.getElementById("code").value;
+
+      // CHECK: Is the field empty?
+      if (!code) {
+        document.getElementById("msg").innerText = "Please enter a code.";
+        return;
+      }
+
+      try {
+        const res = await fetch("https://food-court-20n0.onrender.com/api/admin/verify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          window.location.href = "admin-dashboard.html";
+        } else {
+          document.getElementById("msg").innerText = "Invalid admin code.";
+        }
+      } catch (err) {
+        console.log(err);
+        document.getElementById("msg").innerText = "Server error. Check backend.";
+      }
+    });
+  </script>
+</body>
+</html>
+<script>
+  document.getElementById("adminBtn").addEventListener("click", function () {
+    window.location.href = "admin-login.html";
+  });
+</script>

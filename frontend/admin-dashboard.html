@@ -1,0 +1,11 @@
+<script>
+  // Check if admin is logged in
+  const token = localStorage.getItem("adminToken");
+
+  if (!token) {
+    // Redirect to login page if not logged in
+    window.location.href = "admin-login.html";
+  }
+</script>
+<h1>Welcome to the Admin Dashboard</h1>
+<p>You are now logged in.</p>

@@ -1,0 +1,230 @@
+/* ================= PAGE LAYOUT ================= */
+
+.place-order {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 50px;
+  margin: 80px 0;
+}
+
+.place-order-left {
+  width: 100%;
+  max-width: max(30%, 480px);
+}
+
+.place-order-right {
+  width: 100%;
+  max-width: max(40%, 480px);
+}
+
+/* ================= TITLE ================= */
+
+.place-order-left .title {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 35px;
+}
+
+/* ================= INPUTS ================= */
+
+.place-order-left input,
+.place-order-left select,
+.place-order-left textarea {
+  margin-bottom: 14px;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d6d6d6;
+  border-radius: 6px;
+  outline: none;
+  font-size: 14px;
+  background: #fafafa;
+  transition: all 0.2s ease;
+}
+
+/* Focus effect */
+
+.place-order-left input:focus,
+.place-order-left select:focus,
+.place-order-left textarea:focus {
+  border-color: tomato;
+  background: #fff;
+  box-shadow: 0 0 0 2px rgba(255, 99, 71, 0.15);
+}
+
+/* ================= MULTI INPUT ================= */
+
+.place-order-left .multi-field {
+  display: flex;
+  gap: 10px;
+}
+
+/* ================= USER TYPE SELECTOR ================= */
+
+.user-type-boxes {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.type-box {
+  padding: 10px 18px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.type-box:hover {
+  border-color: tomato;
+}
+
+.type-box.active {
+  border-color: tomato;
+  background: #fff0ec;
+  color: tomato;
+}
+
+/* ================= MODERN BREAK TIME PICKER ================= */
+
+.break-time-container {
+  margin-top: 8px;
+  margin-bottom: 12px;
+}
+
+.break-time-label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.time-input-box {
+  width: 480px;        /* controls horizontal size */
+  display: flex;
+  align-items: center;
+  border: 1px solid #d6d6d6;
+  border-radius: 8px;
+  padding: 10px 2px;  /* keeps vertical height same */
+  background: #fafafa;
+  transition: all 0.2s ease;
+}
+
+.time-input-box:hover {
+  border-color: tomato;
+  background: white;
+}
+
+.time-input-box input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 15px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.delivery-window {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #666;
+}
+
+/* ================= CART TOTAL ================= */
+
+.cart-total {
+  border: 1px solid #eee;
+  padding: 25px;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.cart-total h2 {
+  margin-bottom: 20px;
+}
+
+.cart-total-details {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.cart-total hr {
+  margin: 10px 0;
+  border: none;
+  border-top: 1px solid #eee;
+}
+
+/* ================= PAYMENT OPTIONS ================= */
+
+.payment-options {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid tomato;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #fff;
+}
+
+/* ================= BUTTONS ================= */
+
+.payment-options button {
+  border: none;
+  background: tomato;
+  color: white;
+  padding: 12px 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.25s ease;
+}
+
+.payment-options button:hover {
+  background: #e24c2a;
+  transform: translateY(-1px);
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 700px) {
+
+  .place-order {
+    flex-direction: column;
+    gap: 35px;
+  }
+
+  .place-order-left,
+  .place-order-right {
+    max-width: 100%;
+  }
+
+}
+.pay-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #ff4d4f, #ff7a45);
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.pay-btn:hover {
+  transform: scale(1.02);
+}

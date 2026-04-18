@@ -1,0 +1,254 @@
+/* ================================
+   Page Wrapper
+================================ */
+
+.list-page {
+  width: 100%;
+  padding: 30px 40px;
+  box-sizing: border-box;
+}
+
+.list-container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.list-title {
+  font-size: 24px;
+  margin-bottom: 18px;
+  font-weight: 600;
+}
+
+/* ================================
+   Card
+================================ */
+
+.list-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  border: 1px solid #eee;
+}
+
+/* ================================
+   Header
+================================ */
+
+.list-header {
+  display: grid;
+  grid-template-columns: 80px 1.5fr 1.2fr 100px 120px 100px 100px 200px; /* ✅ UPDATED */
+  padding: 14px 10px;
+  border-bottom: 2px solid #f0f0f0;
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+/* ================================
+   Body
+================================ */
+
+.list-body {
+  width: 100%;
+}
+
+/* ================================
+   Rows
+================================ */
+
+.list-row {
+  display: grid;
+  grid-template-columns: 80px 1.5fr 1.2fr 100px 120px 100px 100px 200px; /* ✅ UPDATED */
+  align-items: center;
+  padding: 14px 10px;
+  border-bottom: 1px solid #f5f5f5;
+  font-size: 14px;
+  transition: 0.2s ease;
+}
+
+.list-row:hover {
+  background: #fafafa;
+}
+
+.list-row.paused-row {
+  opacity: 0.6;
+}
+
+/* ================================
+   Image
+================================ */
+
+.image-wrapper {
+  position: relative;
+}
+
+.image-wrapper img {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.paused-badge {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  font-size: 11px;
+  padding: 3px 6px;
+  border-radius: 6px;
+}
+
+/* ================================
+   Type Badge
+================================ */
+
+.type-badge {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  width: fit-content;
+}
+
+.type-badge.Packed {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.type-badge.Unpacked {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+/* ================================
+   Quantity Input (NEW)
+================================ */
+
+.quantity-input {
+  width: 70px;
+  padding: 6px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  text-align: center;
+  font-size: 13px;
+}
+
+.quantity-input:focus {
+  outline: none;
+  border-color: #4caf50;
+}
+
+/* ================================
+   Status Text
+================================ */
+
+.status-text {
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.status-text.active {
+  color: #2e7d32;
+}
+
+.status-text.paused {
+  color: #d32f2f;
+}
+
+/* ================================
+   Buttons
+================================ */
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pause-btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  color: #fff;
+}
+
+.pause-btn.pause {
+  background: #ff9800;
+}
+
+.pause-btn.pause:hover {
+  background: #f57c00;
+}
+
+.pause-btn.resume {
+  background: #4caf50;
+}
+
+.pause-btn.resume:hover {
+  background: #388e3c;
+}
+
+.delete-btn {
+  background: #ff4d4d;
+  color: white;
+  padding: 8px 14px;
+  font-size: 13px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.delete-btn:hover {
+  background: #d93636;
+}
+
+/* ================================
+   Responsive
+================================ */
+
+@media (max-width: 900px) {
+  .list-header,
+  .list-row {
+    grid-template-columns: 70px 1.2fr 1fr 80px 100px 80px 80px 150px; /* ✅ UPDATED */
+    font-size: 12px;
+  }
+
+  .image-wrapper img {
+    width: 45px;
+    height: 45px;
+  }
+}
+
+@media (max-width: 700px) {
+  .list-header {
+    display: none;
+  }
+
+  .list-row {
+    grid-template-columns: 1fr;
+    row-gap: 10px;
+    padding: 15px;
+  }
+
+  .action-buttons {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/* ================================
+   Out of Stock (NEW)
+================================ */
+
+.status-text.out {
+  color: #d32f2f;
+  font-weight: 600;
+}
