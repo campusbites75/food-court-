@@ -5,12 +5,11 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Cart = () => {
-
   const {
     cartItems,
     food_list,
     removeFromCart,
-    addToCart, // 👈 make sure this exists in StoreContext
+    addToCart,
     getTotalCartAmount,
     url,
     currency,
@@ -18,16 +17,16 @@ const Cart = () => {
   } = useContext(StoreContext);
 
   const navigate = useNavigate();
+
   useEffect(() => {
-  window.scrollTo(0, 0);
-}, []);
+    window.scrollTo(0, 0);
+  }, []);
 
   const [promoCode, setPromoCode] = useState("");
   const [promoMessage, setPromoMessage] = useState("");
   const [discount, setDiscount] = useState(0);
 
   const applyCoupon = async () => {
-
     if (!promoCode) {
       setPromoMessage("Enter a promo code");
       return;
@@ -42,7 +41,6 @@ const Cart = () => {
     }
 
     try {
-
       const res = await axios.post(
         "https://food-court-20n0.onrender.com/api/coupon/apply",
         {
@@ -52,35 +50,25 @@ const Cart = () => {
       );
 
       if (res.data.success) {
-
         setDiscount(res.data.discount);
 
         usedCoupons.push(promoCode.toUpperCase());
         localStorage.setItem("usedCoupons", JSON.stringify(usedCoupons));
 
         setPromoMessage(`Coupon applied! ₹${res.data.discount} discount`);
-
       } else {
-
         setDiscount(0);
         setPromoMessage(res.data.message || "Invalid coupon");
-
       }
-
     } catch (error) {
-
       console.error(error);
       setPromoMessage("Server error");
-
     }
-
   };
 
   return (
     <div className="cart">
-
       <div className="cart-items">
-
         <div className="cart-items-title">
           <p>Items</p>
           <p>Title</p>
@@ -93,65 +81,61 @@ const Cart = () => {
         <hr />
 
         {food_list.map((item, index) => {
-
           if (cartItems[item._id] > 0) {
-
             return (
               <div key={index}>
-
                 <div className="cart-items-title cart-items-item">
 
-                  <img src={url + "/images/" + item.image} alt="" />
+                  {/* ✅ FIXED IMAGE */}
+                  <img
+                    src={
+                      item.image
+                        ? item.image.startsWith("http")
+                          ? item.image
+                          : `${url}/images/${item.image}`
+                        : "/fallback.png"
+                    }
+                    alt={item.name}
+                    className="cart-item-image"
+                  />
 
                   <p>{item.name}</p>
 
                   <p>{currency}{item.price}</p>
 
-                  {/* 🔥 NEW QUANTITY CONTROL */}
+                  {/* ✅ Quantity Controls */}
                   <div className="cart-quantity-control">
-
-                    <button
-                      onClick={() => removeFromCart(item._id)}
-                    >
+                    <button onClick={() => removeFromCart(item._id)}>
                       -
                     </button>
 
                     <span>{cartItems[item._id]}</span>
 
-                    <button
-                      onClick={() => addToCart(item._id)}
-                    >
+                    <button onClick={() => addToCart(item._id)}>
                       +
                     </button>
-
                   </div>
 
-                  <p>{currency}{item.price * cartItems[item._id]}</p>
+                  <p>
+                    {currency}{item.price * cartItems[item._id]}
+                  </p>
 
                 </div>
 
                 <hr />
-
               </div>
             );
-
           }
-
           return null;
-
         })}
-
       </div>
 
-
       <div className="cart-bottom">
-
+        {/* ✅ CART TOTAL */}
         <div className="cart-total">
-
           <h2>Cart Totals</h2>
 
           <div>
-
             <div className="cart-total-details">
               <p>Subtotal</p>
               <p>{currency}{getTotalCartAmount()}</p>
@@ -161,7 +145,10 @@ const Cart = () => {
 
             <div className="cart-total-details">
               <p>Delivery Fee</p>
-              <p>{currency}{getTotalCartAmount() === 0 ? 0 : deliveryFee}</p>
+              <p>
+                {currency}
+                {getTotalCartAmount() === 0 ? 0 : deliveryFee}
+              </p>
             </div>
 
             <hr />
@@ -191,24 +178,19 @@ const Cart = () => {
                 🎉 You saved {currency}{discount} on this order!
               </p>
             )}
-
           </div>
 
           <button onClick={() => navigate("/order")}>
             PROCEED TO CHECKOUT
           </button>
-
         </div>
 
-
+        {/* ✅ PROMO CODE */}
         <div className="cart-promocode">
-
           <div>
-
             <p>If you have a promo code, Enter it here</p>
 
             <div className="cart-promocode-input">
-
               <input
                 type="text"
                 placeholder="promo code"
@@ -219,7 +201,6 @@ const Cart = () => {
               <button onClick={applyCoupon}>
                 Submit
               </button>
-
             </div>
 
             {promoMessage && (
@@ -227,16 +208,11 @@ const Cart = () => {
                 {promoMessage}
               </p>
             )}
-
           </div>
-
         </div>
-
       </div>
-
     </div>
   );
-
 };
 
 export default Cart;
