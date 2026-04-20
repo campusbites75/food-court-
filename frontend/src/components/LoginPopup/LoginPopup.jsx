@@ -4,7 +4,7 @@ import { StoreContext } from "../../Context/StoreContext";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const LoginPopup = ({ showLogin = true, setShowLogin }) => {
+const LoginPopup = ({ showLogin = true, setShowLogin, showGoogleLogin = false }) => {
   const { setToken, setUser, url } = useContext(StoreContext);
   const googleDivRef = useRef(null);
 
@@ -21,15 +21,12 @@ const LoginPopup = ({ showLogin = true, setShowLogin }) => {
         const newToken = res.data.token;
         const userData = res.data.user;
 
-        // ✅ Save to localStorage
         localStorage.setItem("token", newToken);
         localStorage.setItem("user", JSON.stringify(userData));
 
-        // ✅ Update global state
         setToken(newToken);
         setUser(userData);
 
-        // 🛒 Merge guest cart
         const guestCart =
           JSON.parse(localStorage.getItem("guestCart")) || {};
 
@@ -51,9 +48,7 @@ const LoginPopup = ({ showLogin = true, setShowLogin }) => {
 
         if (setShowLogin) setShowLogin(false);
 
-        // 🔁 Reload to unlock app
         window.location.reload();
-
       } else {
         toast.error(res.data.message || "Login failed");
       }
@@ -65,13 +60,15 @@ const LoginPopup = ({ showLogin = true, setShowLogin }) => {
 
   // ================= GOOGLE INIT =================
   useEffect(() => {
+    if (!showGoogleLogin) return; // 👈 STOP if hidden
+
     if (!window.google || !googleDivRef.current) return;
 
     googleDivRef.current.innerHTML = "";
 
     window.google.accounts.id.initialize({
       client_id:
-        "850316169928-5a6nn5cq63ikm5vrdr9q5gm9mqplhohg.apps.googleusercontent.com",
+        "850316169928-afv9arfjktro2uvqi8j01p79j93g3s86.apps.googleusercontent.com",
       callback: handleGoogleResponse,
     });
 
@@ -80,7 +77,7 @@ const LoginPopup = ({ showLogin = true, setShowLogin }) => {
       size: "large",
       width: 300,
     });
-  }, []);
+  }, [showGoogleLogin]);
 
   // ================= UI =================
   return (
@@ -91,18 +88,23 @@ const LoginPopup = ({ showLogin = true, setShowLogin }) => {
           <h2>Sign in to continue</h2>
         </div>
 
-        <div
-          ref={googleDivRef}
-          style={{
-            marginTop: "20px",
-            display: "flex",
-            justifyContent: "center",
-          }}
-        ></div>
+        {/* 👇 GOOGLE LOGIN (HIDDEN CONDITIONALLY) */}
+        {showGoogleLogin && (
+          <>
+            <div
+              ref={googleDivRef}
+              style={{
+                marginTop: "20px",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            ></div>
 
-        <p style={{ marginTop: "15px", fontSize: "12px", textAlign: "center" }}>
-          Please sign in with Google to use the canteen
-        </p>
+            <p style={{ marginTop: "15px", fontSize: "12px", textAlign: "center" }}>
+              Please sign in with Google to use the canteen
+            </p>
+          </>
+        )}
 
       </div>
     </div>
