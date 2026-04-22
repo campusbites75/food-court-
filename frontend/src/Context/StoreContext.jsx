@@ -5,7 +5,7 @@ import axios from "axios";
 export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
-  const url = "https://food-court-20n0.onrender.com";
+  const url = "https://nescafe-ovhf.onrender.com";
 
   const [food_list, setFoodList] = useState([]);
   const [cartItems, setCartItems] = useState({});
@@ -21,7 +21,6 @@ const StoreContextProvider = (props) => {
   const [discount, setDiscount] = useState(0);
   const [couponCode, setCouponCode] = useState("");
 
-  // ✅ Kitchen status
   const [kitchenOpen, setKitchenOpen] = useState(null);
 
   // ============================
@@ -91,12 +90,24 @@ const StoreContextProvider = (props) => {
   };
 
   // ===============================
-  // ADD TO CART
+  // ✅ ADD TO CART WITH STOCK CHECK
   // ===============================
   const addToCart = async (itemId) => {
+    const item = food_list.find((p) => p._id === itemId);
+    if (!item) return;
+
+    const currentQty = cartItems[itemId] || 0;
+    const stock = item.quantity || 0;
+
+    // 🚫 Prevent exceeding stock
+    if (currentQty >= stock) {
+      alert(`Only ${stock} items available in stock`);
+      return;
+    }
+
     const updatedCart = {
       ...cartItems,
-      [itemId]: (cartItems[itemId] || 0) + 1,
+      [itemId]: currentQty + 1,
     };
 
     setCartItems(updatedCart);
@@ -193,7 +204,7 @@ const StoreContextProvider = (props) => {
   };
 
   // ===============================
-  // INITIAL LOAD + AUTO REFRESH ✅
+  // INITIAL LOAD + AUTO REFRESH
   // ===============================
   useEffect(() => {
     async function loadData() {
@@ -213,10 +224,9 @@ const StoreContextProvider = (props) => {
 
     loadData();
 
-    // 🔥 AUTO REFRESH FOOD LIST
     const interval = setInterval(() => {
       fetchFoodList();
-    }, 3000); // every 3 sec
+    }, 3000);
 
     return () => clearInterval(interval);
   }, []);
