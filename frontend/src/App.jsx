@@ -15,6 +15,9 @@ import About from "./pages/About";
 import Delivery from "./pages/Delivery";
 import Privacy from "./pages/Privacy";
 
+// ✅ NEW IMPORT
+import OrderConfirmed from './pages/OrderConfirmed';
+
 const App = () => {
 
   const [showLogin, setShowLogin] = useState(false);
@@ -63,6 +66,9 @@ const App = () => {
               <Route path="/about" element={<About />} />
               <Route path="/delivery" element={<Delivery />} />
               <Route path="/privacy" element={<Privacy />} />
+
+              {/* ✅ ORDER CONFIRMED PAGE */}
+              <Route path="/order-confirmed/:id" element={<OrderConfirmed />} />
 
               {/* 🔒 Block unknown routes */}
               <Route path="*" element={<Navigate to="/" replace />} />
