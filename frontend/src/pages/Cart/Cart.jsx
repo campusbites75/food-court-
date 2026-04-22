@@ -86,7 +86,6 @@ const Cart = () => {
               <div key={index}>
                 <div className="cart-items-title cart-items-item">
 
-                  {/* ✅ FIXED IMAGE */}
                   <img
                     src={
                       item.image
@@ -103,7 +102,7 @@ const Cart = () => {
 
                   <p>{currency}{item.price}</p>
 
-                  {/* ✅ Quantity Controls */}
+                  {/* ✅ Quantity Controls with STOCK CHECK */}
                   <div className="cart-quantity-control">
                     <button onClick={() => removeFromCart(item._id)}>
                       -
@@ -111,7 +110,28 @@ const Cart = () => {
 
                     <span>{cartItems[item._id]}</span>
 
-                    <button onClick={() => addToCart(item._id)}>
+                    <button
+                      onClick={() => {
+                        const currentQty = cartItems[item._id];
+                        const stock = item.quantity || 0;
+
+                        if (currentQty >= stock) {
+                          alert(`Only ${stock} items available in stock`);
+                          return;
+                        }
+
+                        addToCart(item._id);
+                      }}
+                      disabled={cartItems[item._id] >= (item.quantity || 0)}
+                      style={{
+                        opacity:
+                          cartItems[item._id] >= (item.quantity || 0) ? 0.5 : 1,
+                        cursor:
+                          cartItems[item._id] >= (item.quantity || 0)
+                            ? "not-allowed"
+                            : "pointer"
+                      }}
+                    >
                       +
                     </button>
                   </div>
@@ -131,7 +151,6 @@ const Cart = () => {
       </div>
 
       <div className="cart-bottom">
-        {/* ✅ CART TOTAL */}
         <div className="cart-total">
           <h2>Cart Totals</h2>
 
@@ -185,7 +204,6 @@ const Cart = () => {
           </button>
         </div>
 
-        {/* ✅ PROMO CODE */}
         <div className="cart-promocode">
           <div>
             <p>If you have a promo code, Enter it here</p>
