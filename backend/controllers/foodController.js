@@ -181,12 +181,15 @@ const updateFood = async (req, res) => {
 /* ================= UPDATE QUANTITY ================= */
 const updateQuantity = async (req, res) => {
   try {
-    const { id, quantity } = req.body;
+    let { id, quantity } = req.body;
 
-    if (quantity < 0) {
+    quantity = Number(quantity);
+
+    // ✅ Proper validation (IMPORTANT FIX)
+    if (isNaN(quantity) || quantity < 0) {
       return res.json({
         success: false,
-        message: "Quantity cannot be negative",
+        message: "Invalid quantity",
       });
     }
 
@@ -199,11 +202,14 @@ const updateQuantity = async (req, res) => {
       });
     }
 
+    // ✅ Update quantity
     food.quantity = quantity;
 
-    // 🔥 Auto pause if out of stock
+    // 🔥 FIX: Sync status with quantity
     if (quantity === 0) {
       food.isActive = false;
+    } else {
+      food.isActive = true;
     }
 
     await food.save();
@@ -212,17 +218,17 @@ const updateQuantity = async (req, res) => {
       success: true,
       message: "Quantity updated successfully",
       quantity: food.quantity,
+      isActive: food.isActive,
     });
 
   } catch (error) {
     console.error("UPDATE QUANTITY ERROR:", error);
-    res.json({
+    res.status(500).json({
       success: false,
-      message: "Error updating quantity",
+      message: "Server error while updating quantity",
     });
   }
 };
-
 /* ================= TOGGLE FOOD STATUS ================= */
 const toggleFoodStatus = async (req, res) => {
   try {
