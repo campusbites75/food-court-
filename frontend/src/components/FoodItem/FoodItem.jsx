@@ -3,25 +3,25 @@ import './FoodItem.css';
 import { assets } from '../../assets/assets';
 import { StoreContext } from '../../Context/StoreContext';
 
-const FoodItem = ({ image, name, price, desc, id }) => {
+const FoodItem = ({ image, name, price, desc, id, status, quantity }) => {
     const { cartItems, addToCart, removeFromCart, currency } = useContext(StoreContext);
 
-    // ✅ fallback image
     const fallbackImage = "https://dummyimage.com/300x200/cccccc/000000&text=No+Image";
 
-    // 🔥 FIX: handle both filename + full URL
+    // ✅ Image handler
     const getImageUrl = () => {
         if (!image) return fallbackImage;
-
-        // if already full URL
         if (image.startsWith("http")) return image;
-
-        // if only filename
         return `https://food-court-20n0.onrender.com/images/${image}`;
     };
 
+    // ✅ Availability logic
+    const isAvailable =
+        (quantity === undefined || quantity > 0) &&
+        (status === undefined || status === "Active");
+
     return (
-        <div className='food-item'>
+        <div className={`food-item ${!isAvailable ? "disabled" : ""}`}>
             <div className='food-item-img-container'>
                 <img
                     className='food-item-image'
@@ -33,14 +33,22 @@ const FoodItem = ({ image, name, price, desc, id }) => {
                     }}
                 />
 
-                {!cartItems?.[id] ? (
+                {/* ❌ Show unavailable overlay */}
+                {!isAvailable && (
+                    <div className="food-item-overlay">
+                        <span>Unavailable</span>
+                    </div>
+                )}
+
+                {/* ✅ Cart controls only if available */}
+                {isAvailable && !cartItems?.[id] ? (
                     <img
                         className='add'
                         onClick={() => addToCart(id)}
                         src={assets.add_icon_white}
                         alt="Add"
                     />
-                ) : (
+                ) : isAvailable ? (
                     <div className="food-item-counter">
                         <img
                             src={assets.remove_icon_red}
@@ -54,7 +62,7 @@ const FoodItem = ({ image, name, price, desc, id }) => {
                             alt="Add"
                         />
                     </div>
-                )}
+                ) : null}
             </div>
 
             <div className="food-item-info">
