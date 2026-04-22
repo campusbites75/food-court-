@@ -8,6 +8,7 @@ const FoodDisplay = ({ category }) => {
 
   const filteredFoods = useMemo(() => {
     return food_list.filter((item) => {
+      // Handle category (object or string)
       const itemCategory =
         typeof item.category === "object" && item.category !== null
           ? item.category.name
@@ -21,7 +22,14 @@ const FoodDisplay = ({ category }) => {
         item.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.description?.toLowerCase().includes(searchQuery.toLowerCase());
 
-      return matchesCategory && matchesSearch;
+      // ✅ NEW: Hide out-of-stock items
+      const inStock =
+        (item.quantity !== undefined ? item.quantity > 0 : true) &&
+        (item.status
+          ? item.status.toLowerCase() !== "out of stock"
+          : true);
+
+      return matchesCategory && matchesSearch && inStock;
     });
   }, [food_list, category, searchQuery]);
 
@@ -32,14 +40,15 @@ const FoodDisplay = ({ category }) => {
       <div className="food-display-list">
         {filteredFoods.length > 0 ? (
           filteredFoods.map((item) => {
-            // 🔥 FIX: handle both full URL + filename
-            let imageUrl = "https://dummyimage.com/300x200/cccccc/000000&text=No+Image";
+            // Handle image URL
+            let imageUrl =
+              "https://dummyimage.com/300x200/cccccc/000000&text=No+Image";
 
             if (item.image) {
               if (item.image.startsWith("http")) {
-                imageUrl = item.image; // already full URL
+                imageUrl = item.image;
               } else {
-                imageUrl = `${url}/images/${item.image}`; // filename → full URL
+                imageUrl = `${url}/images/${item.image}`;
               }
             }
 
