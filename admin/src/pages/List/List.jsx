@@ -37,17 +37,19 @@ const List = () => {
     }
   };
 
+  // ✅ FIXED HERE
   const toggleFood = async (foodId) => {
     try {
-      const response = await axios.post(`${url}/api/food/toggle`, { id: foodId });
+      const response = await axios.post(`${url}/api/food/toggle-status`, { id: foodId });
 
       if (response.data.success) {
         toast.success(response.data.message);
-        fetchList();
+        fetchList(); // refresh list
       } else {
         toast.error("Failed to update status");
       }
     } catch (err) {
+      console.error(err);
       toast.error("Server error");
     }
   };
@@ -63,15 +65,13 @@ const List = () => {
         toast.error("Failed to update quantity");
       }
 
-      // ❌ NO fetchList here (important fix)
-
     } catch (err) {
       toast.error(err.response?.data?.message || "Server error");
     }
   };
 
   useEffect(() => {
-    fetchList(); // ✅ only once
+    fetchList();
   }, []);
 
   return (
@@ -116,7 +116,6 @@ const List = () => {
                   {item.productType === "Packed" ? "Packed" : "Unpacked"}
                 </span>
 
-                {/* 🔥 FIXED INPUT */}
                 <input
                   type="number"
                   min="0"
