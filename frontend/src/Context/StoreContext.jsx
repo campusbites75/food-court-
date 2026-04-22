@@ -21,7 +21,7 @@ const StoreContextProvider = (props) => {
   const [discount, setDiscount] = useState(0);
   const [couponCode, setCouponCode] = useState("");
 
-  // ✅ FIX: Kitchen status
+  // ✅ Kitchen status
   const [kitchenOpen, setKitchenOpen] = useState(null);
 
   // ============================
@@ -44,7 +44,7 @@ const StoreContextProvider = (props) => {
   }, []);
 
   // ===============================
-  // FETCH DELIVERY FEE + KITCHEN STATUS
+  // FETCH SETTINGS
   // ===============================
   const fetchSettings = async () => {
     try {
@@ -54,13 +54,39 @@ const StoreContextProvider = (props) => {
         setDeliveryFee(res.data.deliveryFee);
       }
 
-      // ✅ Kitchen status fix
       if (res.data?.kitchenOpen !== undefined) {
         setKitchenOpen(res.data.kitchenOpen);
       }
-
     } catch (err) {
       console.error("Settings fetch error:", err);
+    }
+  };
+
+  // ===============================
+  // FETCH FOOD
+  // ===============================
+  const fetchFoodList = async () => {
+    try {
+      const response = await axios.get("/api/food/list");
+
+      const updatedData = response.data.data.map((item) => {
+        let imageUrl = item.image;
+
+        if (!imageUrl) {
+          imageUrl = null;
+        } else if (!imageUrl.startsWith("http")) {
+          imageUrl = `${url}/images/${imageUrl}`;
+        }
+
+        return {
+          ...item,
+          image: imageUrl,
+        };
+      });
+
+      setFoodList(updatedData);
+    } catch (error) {
+      console.error("FETCH FOOD ERROR:", error);
     }
   };
 
@@ -120,35 +146,6 @@ const StoreContextProvider = (props) => {
   };
 
   // ===============================
-  // FETCH FOOD
-  // ===============================
-  const fetchFoodList = async () => {
-    try {
-      const response = await axios.get("/api/food/list");
-
-      const updatedData = response.data.data.map((item) => {
-        let imageUrl = item.image;
-
-        if (!imageUrl) {
-          imageUrl = null;
-        } else if (!imageUrl.startsWith("http")) {
-          imageUrl = `${url}/images/${imageUrl}`;
-        }
-
-        return {
-          ...item,
-          image: imageUrl,
-        };
-      });
-
-      setFoodList(updatedData);
-
-    } catch (error) {
-      console.error("FETCH FOOD ERROR:", error);
-    }
-  };
-
-  // ===============================
   // PLACE ORDER
   // ===============================
   const placeOrder = async ({
@@ -196,12 +193,12 @@ const StoreContextProvider = (props) => {
   };
 
   // ===============================
-  // INITIAL LOAD
+  // INITIAL LOAD + AUTO REFRESH ✅
   // ===============================
   useEffect(() => {
     async function loadData() {
       await fetchFoodList();
-      await fetchSettings(); // ✅ includes kitchenOpen
+      await fetchSettings();
 
       const storedToken = localStorage.getItem("token");
 
@@ -215,6 +212,13 @@ const StoreContextProvider = (props) => {
     }
 
     loadData();
+
+    // 🔥 AUTO REFRESH FOOD LIST
+    const interval = setInterval(() => {
+      fetchFoodList();
+    }, 3000); // every 3 sec
+
+    return () => clearInterval(interval);
   }, []);
 
   // ===============================
@@ -241,10 +245,8 @@ const StoreContextProvider = (props) => {
     setDiscount,
     couponCode,
     setCouponCode,
-
-    // ✅ IMPORTANT
     kitchenOpen,
-    setKitchenOpen
+    setKitchenOpen,
   };
 
   return (
