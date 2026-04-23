@@ -18,7 +18,7 @@ const handlePayment = async (
     const { data } = await axios.post(
       "https://food-court-20n0.onrender.com/api/payment/create-order",
       { amount },
-      { headers: token ? { Authorization: `Bearer ${token}` } : {} }
+      { headers: token ? { token } : {} }
     );
 
     // ✅ Razorpay script check
@@ -43,27 +43,21 @@ const isMobile = () => {
         setPaymentStatus('verifying');
 
         try {
-         const verify = await axios.post(
-  "https://food-court-20n0.onrender.com/api/payment/verify-payment",
-  {
-    ...response,
-    items,
-    address,
-    amount
-  },
-  {
-    headers: {
-      Authorization: `Bearer ${token}` // 🔥 CRITICAL FIX
-    }
-  }
-);
+          const verify = await axios.post(
+            "https://food-court-20n0.onrender.com/api/payment/verify-payment",
+            {
+              ...response,
+              items,
+              address,
+              amount
+            }
+          );
 
-         if (verify.data.success && verify.data.orderId) {
-  onSuccess(verify.data.orderId);
-} else {
-  console.error("❌ Missing orderId:", verify.data);
-  setPaymentStatus('error');
-}
+          if (verify.data.success) {
+            onSuccess(verify.data.orderId); // ✅ Pass orderId to callback
+          } else {
+            setPaymentStatus('failed');
+          }
         } catch (err) {
           console.error(err);
           setPaymentStatus('error');
@@ -251,7 +245,7 @@ const PlaceOrder = () => {
       try {
         const { data } = await axios.get(
           `https://food-court-20n0.onrender.com/api/order/status/${orderId}`,
-          { headers: token ? { Authorization: `Bearer ${token}` } : {} }
+          { headers: token ? { token } : {} }
         );
 
         const status = data.order?.status || data.status;
@@ -264,9 +258,7 @@ const PlaceOrder = () => {
           localStorage.removeItem("guestCart");
 
           setPaymentStatus('success');
-          setTimeout(() => {
-  window.location.href = "/myorders"; // ✅ force refresh + go to orders
-}, 1500);
+          setTimeout(() => navigate("/"), 1500);
           return;
         }
 
