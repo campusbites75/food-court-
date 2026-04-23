@@ -32,7 +32,7 @@ const createRazorpayOrder = async (req, res) => {
   }
 };
 
-/* ================= 🔥 VERIFY PAYMENT & UPDATE STOCK ================= */
+/* ================= VERIFY PAYMENT & UPDATE STOCK ================= */
 const verifyPayment = async (req, res) => {
   try {
     const {
@@ -67,7 +67,7 @@ const verifyPayment = async (req, res) => {
       });
     }
 
-    // 🔥 UPDATE STOCK HERE (IMPORTANT)
+    // 🔥 UPDATE STOCK
     for (const item of order.items) {
       const food = await foodModel.findById(item._id);
 
@@ -91,14 +91,15 @@ const verifyPayment = async (req, res) => {
 
     await order.save();
 
-    res.json({
+    // 🔥🔥 CRITICAL FIX — RETURN ORDER ID
+    return res.json({
       success: true,
-      message: "Payment verified & stock updated"
+      orderId: order._id
     });
 
   } catch (error) {
     console.error("VERIFY PAYMENT ERROR:", error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Server error"
     });
