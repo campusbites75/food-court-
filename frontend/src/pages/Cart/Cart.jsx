@@ -13,7 +13,9 @@ const Cart = () => {
     getTotalCartAmount,
     url,
     currency,
-    deliveryFee
+    deliveryFee,
+    discount,
+    setDiscount
   } = useContext(StoreContext);
 
   const navigate = useNavigate();
@@ -24,21 +26,12 @@ const Cart = () => {
 
   const [promoCode, setPromoCode] = useState("");
   const [promoMessage, setPromoMessage] = useState("");
-  const [discount, setDiscount] = useState(0);
   const [appliedCoupon, setAppliedCoupon] = useState(null);
 
   // 🔥 APPLY COUPON
   const applyCoupon = async () => {
     if (!promoCode) {
       setPromoMessage("Enter a promo code");
-      return;
-    }
-
-    const usedCoupons =
-      JSON.parse(localStorage.getItem("usedCoupons")) || [];
-
-    if (usedCoupons.includes(promoCode.toUpperCase())) {
-      setPromoMessage("This coupon was already used on this device");
       return;
     }
 
@@ -54,11 +47,8 @@ const Cart = () => {
       if (res.data.success) {
         setDiscount(res.data.discount);
 
-        // 🔥 store full coupon for revalidation
+        // store coupon for revalidation
         setAppliedCoupon(res.data.coupon);
-
-        usedCoupons.push(promoCode.toUpperCase());
-        localStorage.setItem("usedCoupons", JSON.stringify(usedCoupons));
 
         setPromoMessage(`Coupon applied! ₹${res.data.discount} discount`);
       } else {
@@ -120,10 +110,7 @@ const Cart = () => {
 
                   <p>{item.name}</p>
 
-                  <p>
-                    {currency}
-                    {item.price}
-                  </p>
+                  <p>{currency}{item.price}</p>
 
                   <div className="cart-quantity-control">
                     <button onClick={() => removeFromCart(item._id)}>
@@ -138,30 +125,19 @@ const Cart = () => {
                         const stock = item.quantity || 0;
 
                         if (currentQty >= stock) {
-                          alert(`Only ${stock} items available in stock`);
+                          alert(`Only ${stock} items available`);
                           return;
                         }
 
                         addToCart(item._id);
                       }}
                       disabled={cartItems[item._id] >= (item.quantity || 0)}
-                      style={{
-                        opacity:
-                          cartItems[item._id] >= (item.quantity || 0) ? 0.5 : 1,
-                        cursor:
-                          cartItems[item._id] >= (item.quantity || 0)
-                            ? "not-allowed"
-                            : "pointer"
-                      }}
                     >
                       +
                     </button>
                   </div>
 
-                  <p>
-                    {currency}
-                    {item.price * cartItems[item._id]}
-                  </p>
+                  <p>{currency}{item.price * cartItems[item._id]}</p>
                 </div>
 
                 <hr />
@@ -179,10 +155,7 @@ const Cart = () => {
           <div>
             <div className="cart-total-details">
               <p>Subtotal</p>
-              <p>
-                {currency}
-                {getTotalCartAmount()}
-              </p>
+              <p>{currency}{getTotalCartAmount()}</p>
             </div>
 
             <hr />
@@ -201,10 +174,7 @@ const Cart = () => {
               <>
                 <div className="cart-total-details">
                   <p>Discount</p>
-                  <p>
-                    -{currency}
-                    {discount}
-                  </p>
+                  <p>-{currency}{discount}</p>
                 </div>
                 <hr />
               </>
@@ -222,8 +192,7 @@ const Cart = () => {
 
             {discount > 0 && (
               <p style={{ color: "green", marginTop: "10px" }}>
-                🎉 You saved {currency}
-                {discount} on this order!
+                🎉 You saved {currency}{discount}
               </p>
             )}
           </div>
