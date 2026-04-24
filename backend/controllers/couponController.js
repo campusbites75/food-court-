@@ -4,7 +4,6 @@ import couponModel from "../models/couponModel.js";
 
 const createCoupon = async (req, res) => {
   try {
-
     const { code, discountAmount, minOrderAmount } = req.body;
 
     const existing = await couponModel.findOne({
@@ -32,14 +31,12 @@ const createCoupon = async (req, res) => {
     });
 
   } catch (error) {
-
     console.error("CREATE COUPON ERROR:", error);
 
     res.status(500).json({
       success: false,
       message: "Server error"
     });
-
   }
 };
 
@@ -48,7 +45,6 @@ const createCoupon = async (req, res) => {
 
 const listCoupons = async (req, res) => {
   try {
-
     const coupons = await couponModel
       .find()
       .sort({ createdAt: -1 });
@@ -59,11 +55,11 @@ const listCoupons = async (req, res) => {
     });
 
   } catch (error) {
+    console.error("LIST COUPONS ERROR:", error);
 
     res.status(500).json({
       success: false
     });
-
   }
 };
 
@@ -72,7 +68,6 @@ const listCoupons = async (req, res) => {
 
 const deleteCoupon = async (req, res) => {
   try {
-
     const { id } = req.body;
 
     await couponModel.findByIdAndDelete(id);
@@ -83,11 +78,11 @@ const deleteCoupon = async (req, res) => {
     });
 
   } catch (error) {
+    console.error("DELETE COUPON ERROR:", error);
 
     res.status(500).json({
       success: false
     });
-
   }
 };
 
@@ -95,10 +90,15 @@ const deleteCoupon = async (req, res) => {
 /* ================= APPLY COUPON ================= */
 
 const applyCoupon = async (req, res) => {
-
   try {
-
     const { code, subtotal } = req.body;
+
+    if (!code) {
+      return res.json({
+        success: false,
+        message: "Coupon code is required"
+      });
+    }
 
     const coupon = await couponModel.findOne({
       code: code.toUpperCase(),
@@ -113,7 +113,6 @@ const applyCoupon = async (req, res) => {
     }
 
     /* CHECK MINIMUM ORDER */
-
     if (subtotal < coupon.minOrderAmount) {
       return res.json({
         success: false,
@@ -125,20 +124,25 @@ const applyCoupon = async (req, res) => {
 
     const finalTotal = Math.max(subtotal - discount, 0);
 
+    // ✅ IMPORTANT: send coupon details for frontend revalidation
     res.json({
       success: true,
       discount,
-      finalTotal
+      finalTotal,
+      coupon: {
+        code: coupon.code,
+        minOrderAmount: coupon.minOrderAmount,
+        discountAmount: coupon.discountAmount
+      }
     });
 
   } catch (error) {
-
     console.error("APPLY COUPON ERROR:", error);
 
     res.status(500).json({
-      success: false
+      success: false,
+      message: "Server error"
     });
-
   }
 };
 
