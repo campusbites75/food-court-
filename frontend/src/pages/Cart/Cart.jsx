@@ -25,7 +25,9 @@ const Cart = () => {
   const [promoCode, setPromoCode] = useState("");
   const [promoMessage, setPromoMessage] = useState("");
   const [discount, setDiscount] = useState(0);
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
 
+  // 🔥 APPLY COUPON
   const applyCoupon = async () => {
     if (!promoCode) {
       setPromoMessage("Enter a promo code");
@@ -52,12 +54,16 @@ const Cart = () => {
       if (res.data.success) {
         setDiscount(res.data.discount);
 
+        // 🔥 store full coupon for revalidation
+        setAppliedCoupon(res.data.coupon);
+
         usedCoupons.push(promoCode.toUpperCase());
         localStorage.setItem("usedCoupons", JSON.stringify(usedCoupons));
 
         setPromoMessage(`Coupon applied! ₹${res.data.discount} discount`);
       } else {
         setDiscount(0);
+        setAppliedCoupon(null);
         setPromoMessage(res.data.message || "Invalid coupon");
       }
     } catch (error) {
@@ -65,6 +71,21 @@ const Cart = () => {
       setPromoMessage("Server error");
     }
   };
+
+  // 🔥 REVALIDATE COUPON WHEN CART CHANGES
+  useEffect(() => {
+    if (appliedCoupon) {
+      const subtotal = getTotalCartAmount();
+
+      if (subtotal < appliedCoupon.minOrderAmount) {
+        setDiscount(0);
+        setAppliedCoupon(null);
+        setPromoMessage(
+          `Coupon removed: Minimum order ₹${appliedCoupon.minOrderAmount} not met`
+        );
+      }
+    }
+  }, [cartItems]);
 
   return (
     <div className="cart">
@@ -85,7 +106,6 @@ const Cart = () => {
             return (
               <div key={index}>
                 <div className="cart-items-title cart-items-item">
-
                   <img
                     src={
                       item.image
@@ -100,9 +120,11 @@ const Cart = () => {
 
                   <p>{item.name}</p>
 
-                  <p>{currency}{item.price}</p>
+                  <p>
+                    {currency}
+                    {item.price}
+                  </p>
 
-                  {/* ✅ Quantity Controls with STOCK CHECK */}
                   <div className="cart-quantity-control">
                     <button onClick={() => removeFromCart(item._id)}>
                       -
@@ -137,9 +159,9 @@ const Cart = () => {
                   </div>
 
                   <p>
-                    {currency}{item.price * cartItems[item._id]}
+                    {currency}
+                    {item.price * cartItems[item._id]}
                   </p>
-
                 </div>
 
                 <hr />
@@ -157,7 +179,10 @@ const Cart = () => {
           <div>
             <div className="cart-total-details">
               <p>Subtotal</p>
-              <p>{currency}{getTotalCartAmount()}</p>
+              <p>
+                {currency}
+                {getTotalCartAmount()}
+              </p>
             </div>
 
             <hr />
@@ -176,7 +201,10 @@ const Cart = () => {
               <>
                 <div className="cart-total-details">
                   <p>Discount</p>
-                  <p>-{currency}{discount}</p>
+                  <p>
+                    -{currency}
+                    {discount}
+                  </p>
                 </div>
                 <hr />
               </>
@@ -194,7 +222,8 @@ const Cart = () => {
 
             {discount > 0 && (
               <p style={{ color: "green", marginTop: "10px" }}>
-                🎉 You saved {currency}{discount} on this order!
+                🎉 You saved {currency}
+                {discount} on this order!
               </p>
             )}
           </div>
@@ -216,15 +245,11 @@ const Cart = () => {
                 onChange={(e) => setPromoCode(e.target.value)}
               />
 
-              <button onClick={applyCoupon}>
-                Submit
-              </button>
+              <button onClick={applyCoupon}>Submit</button>
             </div>
 
             {promoMessage && (
-              <p className="cart-promocode-message">
-                {promoMessage}
-              </p>
+              <p className="cart-promocode-message">{promoMessage}</p>
             )}
           </div>
         </div>
