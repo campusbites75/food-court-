@@ -38,10 +38,10 @@ foodRouter.post("/add", upload.single('image'), addFood);
 // ✅ Remove food
 foodRouter.post("/remove", removeFood);
 
-// ✅ Pause / Resume food
-foodRouter.post("/toggle-status", toggleFoodStatus);
+// ✅ 🔥 FIXED: Pause / Resume food (IMPORTANT)
+foodRouter.post("/toggle", toggleFoodStatus);
 
-// ✅ 🔥 FIXED: Update quantity (THIS WAS MISSING)
+// ✅ Update quantity
 foodRouter.post("/update-quantity", updateQuantity);
 
 
