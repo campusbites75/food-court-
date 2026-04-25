@@ -1,20 +1,20 @@
 import express from "express";
 import authMiddleware from "../middleware/auth.js";
 import {
-  listOrders, placeOrder, placeOrderCod, userOrders,
+  placeOrder, placeOrderCod, userOrders,
   verifyOrder, acceptOrder, rejectOrder, kitchenOrders,
   markPrepared, markDelivered, getBillByOrderId,
-  getOrderStatus // 🔥 NEW
+  getOrderStatus
 } from "../controllers/orderController.js";
 
 const router = express.Router();
 
-router.get("/list", listOrders);
 router.post("/place", authMiddleware, placeOrder);
 router.post("/placecod", authMiddleware, placeOrderCod);
 router.get("/userorders", authMiddleware, userOrders);
 router.post("/verify", verifyOrder);
-router.get("/status/:orderId", getOrderStatus); // 🔥 ADDED
+
+router.get("/status/:orderId", getOrderStatus);
 router.get("/bill/:orderId", authMiddleware, getBillByOrderId);
 
 router.post("/accept", acceptOrder);
