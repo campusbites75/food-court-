@@ -1,5 +1,5 @@
 // ================================
-// server.js (FINAL WITH SOCKET.IO)
+// server.js (FINAL STABLE VERSION)
 // ================================
 
 import dotenv from "dotenv";
@@ -13,20 +13,17 @@ import { Server } from "socket.io";
 // =====================================
 // FIX __dirname (ES MODULE SUPPORT)
 // =====================================
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // =====================================
 // LOAD ENV FILE
 // =====================================
-
 dotenv.config({ path: path.resolve(__dirname, ".env") });
 
 // =====================================
 // IMPORT ROUTES
 // =====================================
-
 import { connectDB } from "./config/db.js";
 import userRouter from "./routes/userRoute.js";
 import foodRouter from "./routes/foodRoute.js";
@@ -42,37 +39,28 @@ import couponRouter from "./routes/couponRoute.js";
 // =====================================
 // INIT APP
 // =====================================
-
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // =====================================
-// CREATE HTTP SERVER (IMPORTANT)
+// CREATE HTTP SERVER
 // =====================================
-
 const server = http.createServer(app);
 
 // =====================================
 // SOCKET.IO SETUP
 // =====================================
-
 const io = new Server(server, {
   cors: {
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "http://127.0.0.1:5500",
-      "https://campusbitesfoodcourt.vercel.app",
-      "https://campusbitefoodcourtadmin.vercel.app",
-    ],
+    origin: "*", // 🔥 allow all for debugging (safe to restrict later)
     credentials: true,
   },
 });
 
-// 🔥 Make io accessible in routes/controllers
+// Make io available globally
 app.set("io", io);
 
-// 🔥 Socket connection
+// Socket connection
 io.on("connection", (socket) => {
   console.log("⚡ Client connected:", socket.id);
 
@@ -84,42 +72,33 @@ io.on("connection", (socket) => {
 // =====================================
 // CORS
 // =====================================
-
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "http://127.0.0.1:5500",
-      "https://campusbitesfoodcourt.vercel.app",
-      "https://campusbitefoodcourtadmin.vercel.app",
-    ],
+    origin: "*", // 🔥 important for fixing deploy issues
     credentials: true,
   })
 );
 
 // =====================================
-// 🔥 PERFECT MIDDLEWARE ORDER
+// MIDDLEWARE ORDER
 // =====================================
 
-// ✅ 1. Webhook raw parser (MUST be FIRST)
+// Webhook (must be first)
 app.use("/api/payment/webhook", express.raw({ type: "application/json" }));
 
-// ✅ 2. Normal JSON for other APIs
+// JSON parser
 app.use(express.json());
 
 // =====================================
 // STATIC FILES
 // =====================================
-
 app.use("/images", express.static(path.join(__dirname, "uploads")));
 
 // =====================================
 // ROUTES
 // =====================================
-
 app.use("/api/user", userRouter);
-app.use("/api/food", foodRouter);
+app.use("/api/food", foodRouter); // 🔥 important
 app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
 app.use("/api/payment", paymentRoutes);
@@ -130,37 +109,37 @@ app.use("/api/categories", categoryRouter);
 app.use("/api/coupon", couponRouter);
 
 // =====================================
-// DATABASE
+// TEST ROUTE (DEBUG)
 // =====================================
+app.get("/api/test", (req, res) => {
+  res.json({ message: "API is working ✅" });
+});
 
+// =====================================
+// DATABASE CONNECTION
+// =====================================
 connectDB();
 
 // =====================================
-// HEALTH CHECK
+// ROOT ROUTE
 // =====================================
-
 app.get("/", (req, res) => {
-  res.json({ 
-    message: "API Working — Server Online ✔", 
+  res.json({
+    message: "API Working — Server Online ✔",
     timestamp: new Date().toISOString(),
-    paymentStatus: "READY"
   });
 });
 
 // =====================================
 // 404 HANDLER
 // =====================================
-
-app.use("*", (req, res) => {
+app.use((req, res) => {
   res.status(404).json({ error: "Route not found" });
 });
 
 // =====================================
-// START SERVER (IMPORTANT CHANGE)
+// START SERVER
 // =====================================
-
 server.listen(PORT, () => {
-  console.log(`🚀 Server started on http://localhost:${PORT}`);
-  console.log(`⚡ Socket.IO running`);
-  console.log(`📱 Webhook ready: http://localhost:${PORT}/api/payment/webhook`);
+  console.log(`🚀 Server started on port ${PORT}`);
 });
