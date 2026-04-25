@@ -1,5 +1,5 @@
 // ================================
-// server.js (FINAL STABLE VERSION)
+// server.js (FINAL WITH YOUR DOMAINS)
 // ================================
 
 import dotenv from "dotenv";
@@ -50,14 +50,22 @@ const server = http.createServer(app);
 // =====================================
 // SOCKET.IO SETUP
 // =====================================
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://127.0.0.1:5500",
+  "https://campusbitesfoodcourt.vercel.app",
+  "https://campusbitefoodcourtadmin.vercel.app",
+];
+
 const io = new Server(server, {
   cors: {
-    origin: "*", // 🔥 allow all for debugging (safe to restrict later)
+    origin: allowedOrigins,
     credentials: true,
   },
 });
 
-// Make io available globally
+// Make io accessible
 app.set("io", io);
 
 // Socket connection
@@ -74,16 +82,16 @@ io.on("connection", (socket) => {
 // =====================================
 app.use(
   cors({
-    origin: "*", // 🔥 important for fixing deploy issues
+    origin: allowedOrigins,
     credentials: true,
   })
 );
 
 // =====================================
-// MIDDLEWARE ORDER
+// MIDDLEWARE
 // =====================================
 
-// Webhook (must be first)
+// Webhook (MUST be before json)
 app.use("/api/payment/webhook", express.raw({ type: "application/json" }));
 
 // JSON parser
@@ -98,7 +106,7 @@ app.use("/images", express.static(path.join(__dirname, "uploads")));
 // ROUTES
 // =====================================
 app.use("/api/user", userRouter);
-app.use("/api/food", foodRouter); // 🔥 important
+app.use("/api/food", foodRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
 app.use("/api/payment", paymentRoutes);
@@ -109,19 +117,19 @@ app.use("/api/categories", categoryRouter);
 app.use("/api/coupon", couponRouter);
 
 // =====================================
-// TEST ROUTE (DEBUG)
+// DEBUG ROUTE (IMPORTANT)
 // =====================================
 app.get("/api/test", (req, res) => {
-  res.json({ message: "API is working ✅" });
+  res.json({ message: "API working ✅" });
 });
 
 // =====================================
-// DATABASE CONNECTION
+// DATABASE
 // =====================================
 connectDB();
 
 // =====================================
-// ROOT ROUTE
+// ROOT
 // =====================================
 app.get("/", (req, res) => {
   res.json({
