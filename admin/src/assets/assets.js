@@ -5,7 +5,7 @@ import profile_image from "./profile_image.png";
 import upload_area from "./upload_area.png";
 
 // 🔥 ADD THESE
-export const url = "http://localhost:4000"; // backend URL
+export const url = "https://food-court-20n0.onrender.com"; // backend URL
 export const currency = "₹"; // or "$"
 
 export const assets = {
