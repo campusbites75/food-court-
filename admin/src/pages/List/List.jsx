@@ -37,13 +37,14 @@ const List = () => {
     }
   };
 
+  // ✅ FIXED HERE
   const toggleFood = async (foodId) => {
     try {
       const response = await axios.post(`${url}/api/food/toggle-status`, { id: foodId });
 
       if (response.data.success) {
         toast.success(response.data.message);
-        fetchList();
+        fetchList(); // refresh list
       } else {
         toast.error("Failed to update status");
       }
@@ -63,32 +64,9 @@ const List = () => {
       if (!response.data.success) {
         toast.error("Failed to update quantity");
       }
+
     } catch (err) {
       toast.error(err.response?.data?.message || "Server error");
-    }
-  };
-
-  // ✅ NEW: Image Update Function
-  const updateImage = async (id, file) => {
-    try {
-      const formData = new FormData();
-      formData.append("image", file);
-      formData.append("id", id);
-
-      const response = await axios.post(
-  `${url}/api/food/update-image`,
-  formData
-);
-
-      if (response.data.success) {
-        toast.success("Image updated");
-        fetchList();
-      } else {
-        toast.error("Failed to update image");
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error("Server error");
     }
   };
 
@@ -117,31 +95,16 @@ const List = () => {
             {list.map((item, index) => (
               <div key={item._id} className="list-row">
 
-                {/* ✅ UPDATED IMAGE SECTION */}
                 <div className="image-wrapper">
-                  <label htmlFor={`file-${item._id}`}>
-                    <img
-                      src={`${url}/images/${item.image}`}
-                      alt={item.name}
-                      style={{ cursor: "pointer" }}
-                      title="Click to change image"
-                    />
-                  </label>
-
-                  <input
-                    type="file"
-                    id={`file-${item._id}`}
-                    hidden
-                    accept="image/*"
-                    onChange={(e) => {
-                      if (e.target.files[0]) {
-                        updateImage(item._id, e.target.files[0]);
-                      }
-                    }}
+                  <img
+                    src={`${url}/images/${item.image}`}
+                    alt={item.name}
                   />
 
                   {!item.isActive && (
-                    <div className="paused-badge">Paused</div>
+                    <div className="paused-badge">
+                      Paused
+                    </div>
                   )}
                 </div>
 
@@ -185,6 +148,7 @@ const List = () => {
                 </span>
 
                 <div className="action-buttons">
+
                   <button
                     className={`pause-btn ${item.isActive ? "pause" : "resume"}`}
                     onClick={() => toggleFood(item._id)}
@@ -198,8 +162,8 @@ const List = () => {
                   >
                     Delete
                   </button>
-                </div>
 
+                </div>
               </div>
             ))}
           </div>
