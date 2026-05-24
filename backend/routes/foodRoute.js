@@ -8,7 +8,6 @@ import {
   removeFood,
   toggleFoodStatus,
   updateQuantity,
-  updateImage, // ✅ NEW IMPORT
 } from "../controllers/foodController.js";
 
 const foodRouter = express.Router();
@@ -63,14 +62,11 @@ foodRouter.post("/add", upload.single("image"), addFood);
 // ✅ Remove food
 foodRouter.post("/remove", removeFood);
 
-// ✅ Toggle food status
-foodRouter.post("/toggle-status", toggleFoodStatus); // (match frontend)
+// ✅ 🔥 Toggle food status (FIXED)
+foodRouter.post("/toggle", toggleFoodStatus);
 
 // ✅ Update quantity
 foodRouter.post("/update-quantity", updateQuantity);
-
-// ✅ 🔥 NEW: Update only image
-foodRouter.post("/update-image", upload.single("image"), updateImage);
 
 
 // ================================
