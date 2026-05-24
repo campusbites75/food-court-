@@ -39,32 +39,20 @@
     position: relative;
 }
 
-.navbar-menu li a {
-    
-    color: #49557E;
-    text-decoration: none;
-    transition: 0.3s ease;
-}
+.navbar-menu li a,
 .navbar-menu li span {
     color: #49557E;
     text-decoration: none;
     transition: 0.3s ease;
+    cursor: pointer;
 }
 
-.navbar-menu li span:hover {
+.navbar-menu li span:hover,
+.navbar-menu li a:hover {
     color: #ff7a18;
 }
 
-.navbar-menu li a::after {
-    content: "";
-    position: absolute;
-    width: 0%;
-    height: 2px;
-    left: 0;
-    bottom: -6px;
-    background: linear-gradient(135deg, #ff7a18, #ffb347);
-    transition: 0.3s ease;
-}
+.navbar-menu li a::after,
 .navbar-menu li span::after {
     content: "";
     position: absolute;
@@ -76,15 +64,9 @@
     transition: 0.3s ease;
 }
 
-.navbar-menu li span:hover::after {
+.navbar-menu li:hover a::after,
+.navbar-menu li:hover span::after {
     width: 100%;
-}
-.navbar-menu li a:hover::after {
-    width: 100%;
-}
-
-.navbar-menu li a:hover {
-    color: #ff7a18;
 }
 
 .navbar-menu .active {
@@ -119,7 +101,7 @@
     color: #d93025;
 }
 
-/* ================= MOBILE STATUS BAR ================= */
+/* ================= MOBILE STATUS ================= */
 
 .kitchen-status-mobile {
     display: none;
@@ -181,7 +163,7 @@
     border-color: #ff7a18;
 }
 
-/* ================= SIGN IN BUTTON ================= */
+/* ================= SIGN IN ================= */
 
 .signin-btn {
     background: linear-gradient(135deg, #ff7a18, #ffb347);
@@ -201,10 +183,6 @@
     box-shadow: 0 8px 20px rgba(255, 122, 24, 0.35);
 }
 
-.signin-btn:active {
-    transform: translateY(0px);
-}
-
 /* ================= PROFILE ================= */
 
 .navbar-profile {
@@ -216,12 +194,6 @@
     width: 35px;
     height: 35px;
     border-radius: 50%;
-    object-fit: cover;
-    transition: 0.3s ease;
-}
-
-.navbar-profile img:hover {
-    transform: scale(1.08);
 }
 
 .navbar-profile-dropdown {
@@ -237,66 +209,6 @@
     box-shadow: 0 20px 45px rgba(0,0,0,0.12);
     list-style: none;
     z-index: 1000;
-    min-width: 180px;
-    animation: fadeIn 0.2s ease;
-}
-
-/* Dropdown items */
-.navbar-profile-dropdown li {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-    padding: 6px 4px;
-    border-radius: 8px;
-    transition: all 0.25s ease;
-}
-
-/* Hover effect */
-.navbar-profile-dropdown li:hover {
-    background: #fff4f0;
-    color: #ff7a18;
-}
-
-/* ✅ SVG ICON SUPPORT (IMPORTANT FIX) */
-.navbar-profile-dropdown li svg {
-    width: 18px;
-    height: 18px;
-    color: #555;
-    transition: 0.25s ease;
-}
-
-/* Icon hover color */
-.navbar-profile-dropdown li:hover svg {
-    color: #ff7a18;
-}
-
-/* (optional) keep support if you still use images anywhere */
-.navbar-profile-dropdown img {
-    width: 18px;
-    height: 18px;
-    object-fit: contain;
-}
-
-.navbar-profile hr {
-    background-color: #eee;
-    height: 1px;
-    border: none;
-}
-
-.navbar-profile-dropdown li:first-child {
-    cursor: default;
-    font-size: 14px;
-    color: #333;
-}
-
-.navbar-profile-dropdown li:first-child p {
-    margin: 0;
-    font-weight: 600;
-}
-.navbar-profile-dropdown p {
-    margin: 0;
-    font-size: 14px;
 }
 
 /* ================= ADMIN POPUP ================= */
@@ -309,7 +221,6 @@
     align-items: center;
     justify-content: center;
     z-index: 3000;
-    animation: fadeIn 0.2s ease;
 }
 
 .admin-modal {
@@ -318,41 +229,50 @@
     border-radius: 18px;
     width: 340px;
     text-align: center;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.2);
 }
 
-.admin-modal h3 {
-    margin-bottom: 15px;
-}
+/* ================= FLOATING BUTTON ================= */
 
-.admin-modal input {
-    width: 100%;
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-    margin-bottom: 15px;
-    font-size: 14px;
-}
-
-.admin-enter-btn {
-    width: 100%;
-    padding: 10px;
-    border-radius: 10px;
-    border: none;
+.mobile-fab {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
     background: linear-gradient(135deg, #ff7a18, #ffb347);
     color: white;
-    font-weight: 500;
+    font-size: 24px;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+
+    display: none; /* default hidden */
+
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
-    margin-bottom: 10px;
+
+    z-index: 9999;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
 }
 
-.admin-cancel-btn {
-    width: 100%;
-    padding: 10px;
-    border-radius: 10px;
-    border: none;
-    background: #ddd;
-    cursor: pointer;
+/* ================= MOBILE MENU ================= */
+
+.mobile-menu {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    background: white;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    z-index: 2000;
+}
+
+.mobile-menu a {
+    padding: 14px 22px;
+    text-decoration: none;
+    color: #333;
 }
 
 /* ================= RESPONSIVE ================= */
@@ -370,82 +290,9 @@
         display: block;
     }
 
-    .navbar-right {
-        gap: 10px;
-    }
-
-    .admin-btn {
-        padding: 6px 10px;
-        font-size: 12px;
-    }
-
-    .signin-btn {
-        padding: 6px 12px;
-        font-size: 12px;
-    }
-
-    /* ===== SHOW FAB ===== */
-    @media (min-width: 1025px) {
     .mobile-fab {
-        display: none;
+        display: flex; /* show FAB on mobile */
     }
-}
-}
-
-/* ================= FLOATING BUTTON ================= */
-
-.mobile-fab {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: linear-gradient(135deg, #ff7a18, #ffb347);
-    color: white;
-    font-size: 24px;
-    width: 58px;
-    height: 58px;
-    border-radius: 50%;
-
-    display: flex; /* ✅ ALWAYS visible */
-
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-
-    z-index: 9999; /* ✅ increase this */
-    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-}
-
-.mobile-fab:hover {
-    transform: scale(1.1);
-}
-
-/* ================= MOBILE MENU ================= */
-
-.mobile-menu {
-    position: fixed;
-    bottom: 90px;
-    right: 20px;
-    background: white;
-    border-radius: 14px;
-    display: flex;
-    flex-direction: column;
-    padding: 10px 0;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    z-index: 2000;
-    animation: fadeIn 0.2s ease;
-}
-
-.mobile-menu a {
-    padding: 14px 22px;
-    text-decoration: none;
-    color: #333;
-    font-weight: 500;
-    transition: 0.2s ease;
-}
-
-.mobile-menu a:hover {
-    background: #fff4f0;
-    color: #ff7a18;
 }
 
 /* ================= ANIMATION ================= */
