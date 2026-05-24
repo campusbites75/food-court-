@@ -33,7 +33,7 @@ const addFood = async (req, res) => {
       productType: normalizedType,
       image: req.file.filename,
       isActive: true,
-      quantity: 0,
+      quantity: 0, // ✅ default quantity
     });
 
     await newFood.save();
@@ -71,9 +71,16 @@ const listFood = async (req, res) => {
         .sort({ createdAt: -1 });
     }
 
+    const updatedFoods = foods.map((item) => ({
+      ...item._doc,
+      image: item.image
+        ? `https://food-court-20n0.onrender.com/images/${item.image}`
+        : null,
+    }));
+
     res.json({
       success: true,
-      data: foods,
+      data: updatedFoods,
     });
 
   } catch (error) {
@@ -171,63 +178,6 @@ const updateFood = async (req, res) => {
   }
 };
 
-/* ================= UPDATE IMAGE ONLY ================= */
-const updateImage = async (req, res) => {
-  try {
-    const id = req.body.id;
-
-    // 🔥 DEBUG (you can remove later)
-    console.log("ID:", id);
-    console.log("FILE:", req.file);
-
-    if (!id) {
-      return res.json({
-        success: false,
-        message: "ID is missing",
-      });
-    }
-
-    if (!req.file) {
-      return res.json({
-        success: false,
-        message: "Image file is required",
-      });
-    }
-
-    const food = await foodModel.findById(id);
-
-    if (!food) {
-      return res.json({
-        success: false,
-        message: "Food not found",
-      });
-    }
-
-    // delete old image safely
-    if (food.image) {
-      fs.unlink(`uploads/${food.image}`, (err) => {
-        if (err) console.log("Delete error:", err);
-      });
-    }
-
-    food.image = req.file.filename;
-    await food.save();
-
-    res.json({
-      success: true,
-      message: "Image updated successfully",
-    });
-
-  } catch (error) {
-    console.error("UPDATE IMAGE ERROR:", error);
-
-    res.status(500).json({
-      success: false,
-      message: "Server error",
-    });
-  }
-};
-
 /* ================= UPDATE QUANTITY ================= */
 const updateQuantity = async (req, res) => {
   try {
@@ -235,6 +185,7 @@ const updateQuantity = async (req, res) => {
 
     quantity = Number(quantity);
 
+    // ✅ Proper validation (IMPORTANT FIX)
     if (isNaN(quantity) || quantity < 0) {
       return res.json({
         success: false,
@@ -251,8 +202,10 @@ const updateQuantity = async (req, res) => {
       });
     }
 
+    // ✅ Update quantity
     food.quantity = quantity;
 
+    // 🔥 FIX: Sync status with quantity
     if (quantity === 0) {
       food.isActive = false;
     } else {
@@ -276,7 +229,6 @@ const updateQuantity = async (req, res) => {
     });
   }
 };
-
 /* ================= TOGGLE FOOD STATUS ================= */
 const toggleFoodStatus = async (req, res) => {
   try {
@@ -314,7 +266,6 @@ export {
   listFood,
   removeFood,
   updateFood,
-  updateImage, // ✅ NEW EXPORT
   toggleFoodStatus,
-  updateQuantity,
+  updateQuantity, // ✅ NEW EXPORT
 };
