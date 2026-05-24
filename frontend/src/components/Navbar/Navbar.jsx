@@ -4,14 +4,16 @@ import { assets } from '../../assets/assets';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { StoreContext } from '../../Context/StoreContext';
 import { io } from "socket.io-client";
+import { ShoppingBag, LogOut } from "lucide-react";
+
 const Navbar = ({ setShowLogin }) => {
 
   const [menu, setMenu] = useState("home");
   const [scrolled, setScrolled] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false); // ✅ NEW
 
-  const [kitchenOpen, setKitchenOpen] = useState(true); // ✅ Kitchen status
-
+  const [kitchenOpen, setKitchenOpen] = useState(true);
   const profileRef = useRef(null);
 
   const {
@@ -44,17 +46,18 @@ const Navbar = ({ setShowLogin }) => {
 
     fetchKitchenStatus();
   }, []);
-// 🔥 LIVE SOCKET SYNC
-useEffect(() => {
-  const socket = io("https://food-court-20n0.onrender.com");
 
-  socket.on("kitchenStatusUpdated", (status) => {
-    console.log("🔥 Live update received:", status);
-    setKitchenOpen(status);
-  });
+  // 🔥 LIVE SOCKET SYNC
+  useEffect(() => {
+    const socket = io("https://food-court-20n0.onrender.com");
 
-  return () => socket.disconnect();
-}, []);
+    socket.on("kitchenStatusUpdated", (status) => {
+      setKitchenOpen(status);
+    });
+
+    return () => socket.disconnect();
+  }, []);
+
   // Scroll effect
   useEffect(() => {
     const handleScroll = () => {
@@ -110,10 +113,23 @@ useEffect(() => {
             </li>
 
             <li>
-              <a href="#explore-menu" onClick={() => setMenu("menu")} className={menu === "menu" ? "active" : ""}>
-                MENU
-              </a>
-            </li>
+  <span
+    onClick={() => {
+      setMenu("menu");
+      navigate('/');
+      setTimeout(() => {
+        const section = document.getElementById("explore-menu");
+        if (section) {
+          section.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
+    }}
+    className={menu === "menu" ? "active" : ""}
+    style={{ cursor: "pointer" }}
+  >
+    MENU
+  </span>
+</li>
 
             <li>
               <a href="#footer" onClick={() => setMenu("contact")} className={menu === "contact" ? "active" : ""}>
@@ -132,7 +148,6 @@ useEffect(() => {
         {/* Right Section */}
         <div className="navbar-right">
 
-          {/* ✅ Kitchen Status (Desktop) */}
           {!hideGreenBox && (
             <div className={`kitchen-status ${kitchenOpen ? "open" : "closed"}`}>
               {kitchenOpen ? "🟢 Open" : "🔴 Closed"}
@@ -163,10 +178,7 @@ useEffect(() => {
               Sign In
             </button>
           ) : (
-            <div
-              className="navbar-profile"
-              ref={profileRef}
-            >
+            <div className="navbar-profile" ref={profileRef}>
               <img
                 src={
                   user?.picture ||
@@ -174,9 +186,6 @@ useEffect(() => {
                 }
                 alt="profile"
                 onClick={() => setShowProfileMenu(prev => !prev)}
-                onError={(e) => {
-                  e.target.src = `https://ui-avatars.com/api/?name=${user?.name || "User"}&background=ff5722&color=fff`;
-                }}
                 style={{
                   width: "35px",
                   height: "35px",
@@ -188,41 +197,83 @@ useEffect(() => {
 
               {showProfileMenu && (
                 <ul className="navbar-profile-dropdown">
+                  <li><p><strong>{user?.name || "User"}</strong></p></li>
+                  <hr />
 
-                  <li style={{ cursor: "default" }}>
-                    <p><strong>{user?.name || "User"}</strong></p>
-                  </li>
+<li
+  onClick={() => {
+    setShowProfileMenu(false);
+    navigate('/myorders');
+  }}
+  style={{ display: "flex", alignItems: "center", gap: "10px" }}
+>
+  <ShoppingBag size={18} />
+  <p>Orders</p>
+</li>
 
                   <hr />
 
-                  <li onClick={() => {
-                    setShowProfileMenu(false);
-                    navigate('/myorders');
-                  }}>
-                    <img src={assets.bag_icon} alt="" />
-                    <p>Orders</p>
-                  </li>
-
-                  <hr />
-
-                  <li onClick={logout}>
-                    <img src={assets.logout_icon} alt="" />
-                    <p>Logout</p>
-                  </li>
-
+                  <li
+  onClick={logout}
+  style={{ display: "flex", alignItems: "center", gap: "10px" }}
+>
+  <LogOut size={18} />
+  <p>Logout</p>
+</li> 
                 </ul>
               )}
             </div>
           )}
-
         </div>
       </div>
 
-      {/* ✅ Mobile Kitchen Status Bar */}
+      {/* ✅ Mobile Kitchen Status */}
       {!hideGreenBox && (
         <div className={`kitchen-status-mobile ${kitchenOpen ? "open" : "closed"}`}>
           {kitchenOpen ? "🟢 Kitchen Open" : "🔴 Kitchen Closed"}
         </div>
+      )}
+
+      {/* ✅ FLOATING MOBILE MENU */}
+      {!hideGreenBox && (
+        <>
+          <div 
+            className="mobile-fab"
+            onClick={() => setShowMobileMenu(prev => !prev)}
+          >
+            {showMobileMenu ? "✕" : "☰"}
+          </div>
+
+          {showMobileMenu && (
+            <div className="mobile-menu">
+  <Link to="/" onClick={() => setShowMobileMenu(false)}>Home</Link>
+
+  <span
+    onClick={() => {
+      setShowMobileMenu(false);
+      navigate('/');
+      setTimeout(() => {
+        const section = document.getElementById("explore-menu");
+        if (section) {
+          section.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
+    }}
+    style={{ cursor: "pointer", padding: "14px 22px" }}
+  >
+    Menu
+  </span>
+
+  <a href="#footer" onClick={() => setShowMobileMenu(false)}>
+    Contact Us
+  </a>
+
+  <Link to="/myorders" onClick={() => setShowMobileMenu(false)}>
+    Previous Orders
+  </Link>
+</div>
+          )}
+        </>
       )}
 
       {/* Admin Popup */}
