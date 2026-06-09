@@ -178,15 +178,19 @@ const StoreContextProvider = (props) => {
           : "/api/order/place";
 
       const response = await axios.post(endpoint, {
-        items,
-        amount: subtotal - discount,
-        discount,
-        couponCode,
-        deliveryFee,
-        totalAmount: subtotal + deliveryFee - discount,
-        address,
-        paymentMethod,
-      });
+  items,
+  amount: subtotal - discount,
+  discount,
+  couponCode,
+  deliveryFee,
+  totalAmount: subtotal + deliveryFee - discount,
+  address,
+  paymentMethod,
+}, {
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem("token")}`
+  }
+});
 
       if (response.data.success && paymentMethod === "COD") {
         setCartItems({});
