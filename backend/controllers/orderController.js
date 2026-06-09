@@ -106,8 +106,8 @@ const createOrderObject = async ({
     address,
     deliveryFee: deliveryFee || 0,
     paymentMethod,
-    paymentStatus: paymentMethod === "COD" ? "PAID" : "PENDING",
-    status: "pending",
+    paymentStatus: paymentMethod === "COD" ? "paid" : "pending",
+    status: "pending", // ✅ ALL new orders start as pending
     payment: paymentMethod === "COD",
   });
 };
@@ -240,8 +240,8 @@ export const verifyOrder = async (req, res) => {
 
       await updateStock(order.items);
 
-      order.paymentStatus = "PAID";
-      order.status = "CONFIRMED";
+      order.paymentStatus = "paid";
+      order.status = "pending"; // ✅ goes to pending so admin can accept
       order.payment = true;
 
       await order.save();
@@ -249,8 +249,8 @@ export const verifyOrder = async (req, res) => {
       return res.json({ success: true });
     } else {
       await orderModel.findByIdAndUpdate(orderId, {
-        paymentStatus: "FAILED",
-        status: "FAILED",
+        paymentStatus: "failed",
+        status: "rejected",
       });
 
       return res.json({ success: false });
@@ -270,7 +270,7 @@ export const acceptOrder = async (req, res) => {
     const order = await orderModel.findById(orderId);
     if (!order) return res.json({ success: false });
 
-    order.status = "ACCEPTED";
+    order.status = "accepted";
     await order.save();
 
     res.json({ success: true, message: "Order accepted" });
@@ -287,7 +287,7 @@ export const rejectOrder = async (req, res) => {
     const order = await orderModel.findById(orderId);
     if (!order) return res.json({ success: false });
 
-    order.status = "REJECTED";
+    order.status = "rejected";
     await order.save();
 
     res.json({ success: true, message: "Order rejected" });
@@ -300,12 +300,12 @@ export const rejectOrder = async (req, res) => {
 export const kitchenOrders = async (req, res) => {
   try {
     const orders = await orderModel.find().sort({ createdAt: -1 });
-
     res.json({ success: true, data: orders });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
 // ================= MARK ORDER PREPARED =================
 export const markPrepared = async (req, res) => {
   try {
@@ -314,7 +314,7 @@ export const markPrepared = async (req, res) => {
     const order = await orderModel.findById(orderId);
     if (!order) return res.json({ success: false, message: "Order not found" });
 
-    order.status = "PREPARED";
+    order.status = "prepared";
     await order.save();
 
     res.json({ success: true, message: "Order marked as prepared" });
@@ -331,7 +331,7 @@ export const markDelivered = async (req, res) => {
     const order = await orderModel.findById(orderId);
     if (!order) return res.json({ success: false, message: "Order not found" });
 
-    order.status = "DELIVERED";
+    order.status = "delivered";
     await order.save();
 
     res.json({ success: true, message: "Order delivered" });
@@ -358,6 +358,7 @@ export const getBillByOrderId = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
 // ================= GET ORDER STATUS =================
 export const getOrderStatus = async (req, res) => {
   try {
@@ -377,6 +378,8 @@ export const getOrderStatus = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+// ================= LIST ALL ORDERS =================
 export const listOrders = async (req, res) => {
   try {
     const orders = await orderModel.find().sort({ createdAt: -1 });
