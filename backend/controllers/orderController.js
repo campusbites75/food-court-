@@ -107,7 +107,7 @@ const createOrderObject = async ({
     deliveryFee: deliveryFee || 0,
     paymentMethod,
     paymentStatus: paymentMethod === "COD" ? "PAID" : "PENDING",
-    status: paymentMethod === "COD" ? "CONFIRMED" : "PENDING",
+    status: "pending",
     payment: paymentMethod === "COD",
   });
 };
