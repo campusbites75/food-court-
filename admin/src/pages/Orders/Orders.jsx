@@ -70,8 +70,7 @@ const Orders = () => {
 
 
   /* ================= SOUND ALERT ================= */
-const hasPendingOrders = onlineOrders.some((o) => o.status === "pending" || o.status === "prepared");
-useOrderAlert(hasPendingOrders);
+const hasPendingOrders = onlineOrders.some((o) => o.status === "pending");
 
 
   /* ================= LOAD ONLINE ORDERS ================= */
