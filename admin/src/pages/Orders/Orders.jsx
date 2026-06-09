@@ -3,6 +3,42 @@ import axios from "axios";
 import "./Orders.css";
 import { QRCodeCanvas } from "qrcode.react";
 
+/* ================= ORDER ALERT SOUND HOOK ================= */
+const useOrderAlert = (hasPendingOrders) => {
+  const intervalRef = useRef(null);
+  const isPlayingRef = useRef(false);
+
+  const playBeep = () => {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+      oscillator.connect(gainNode);
+      gainNode.connect(ctx.destination);
+      oscillator.type = "sine";
+      oscillator.frequency.setValueAtTime(880, ctx.currentTime);
+      gainNode.gain.setValueAtTime(0.5, ctx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
+      oscillator.start(ctx.currentTime);
+      oscillator.stop(ctx.currentTime + 0.6);
+    } catch (e) {
+      console.warn("Audio error:", e);
+    }
+  };
+
+  useEffect(() => {
+    if (hasPendingOrders) {
+      if (isPlayingRef.current) return;
+      isPlayingRef.current = true;
+      playBeep();
+      intervalRef.current = setInterval(playBeep, 2500);
+    } else {
+      isPlayingRef.current = false;
+      clearInterval(intervalRef.current);
+    }
+    return () => clearInterval(intervalRef.current);
+  }, [hasPendingOrders]);
+};
 
 const Orders = () => {
   /* ================= ONLINE ORDERS ================= */
@@ -19,7 +55,7 @@ const Orders = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [modalType, setModalType] = useState("online"); // online | pos
 
-  const API_BASE = "https://food-court-20n0.onrender.com";
+  const API_BASE = "https://singhcafe.onrender.com";
 
   // ONLINE APIs
   const LIST_API = `${API_BASE}/api/order/list`;
@@ -31,6 +67,12 @@ const Orders = () => {
   // POS APIs
   const POS_LIST_API = `${API_BASE}/api/pos/orders`;
   const POS_STATUS_API = `${API_BASE}/api/pos/update-status`;
+
+
+  /* ================= SOUND ALERT ================= */
+const hasPendingOrders = onlineOrders.some((o) => o.status === "pending" || o.status === "prepared");
+useOrderAlert(hasPendingOrders);
+
 
   /* ================= LOAD ONLINE ORDERS ================= */
   const loadOrders = async () => {
@@ -162,7 +204,7 @@ const Orders = () => {
   };
 
   const generateUPILink = (order) => {
-    const upiId = "9569763863@kotak811"; // replace with your UPI
+    const upiId = "9569763863@kotak811";
     const amount = order.totalAmount || order.amount;
 
     return `upi://pay?pa=${upiId}&pn=CampusBites&am=${amount}&cu=INR`;
@@ -197,24 +239,20 @@ const Orders = () => {
                 <td className="bold price">
                   ₹{(order.amount + (order.deliveryFee || 0)).toFixed(2)}
                 </td>
-               {/* ✅ ORDER STATUS */}
-{/* STATUS */}
-<td>
-  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-    
-    <span className={statusClass(order.status)}>
-      {rejectingOrders.includes(order._id)
-        ? "Rejecting (15s)"
-        : order.status}
-    </span>
-
-    {/* PAYMENT INLINE */}
-    <span className="payment-pill">
-      {order.paymentMethod === "COD" ? "💵 CASH" : "💳 PAID"}
-    </span>
-
-  </div>
-</td>
+                {/* STATUS */}
+                <td>
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    <span className={statusClass(order.status)}>
+                      {rejectingOrders.includes(order._id)
+                        ? "Rejecting (15s)"
+                        : order.status}
+                    </span>
+                    {/* PAYMENT INLINE */}
+                    <span className="payment-pill">
+                      {order.paymentMethod === "COD" ? "💵 CASH" : "💳 PAID"}
+                    </span>
+                  </div>
+                </td>
                 <td>
                   <div className="action-buttons">
                     <button
@@ -273,8 +311,7 @@ const Orders = () => {
               <th>Customer</th>
               <th>Order Type</th>
               <th>Status</th>
- {/* ✅ NEW COLUMN */}
-<th className="col-action">Action</th>
+              <th className="col-action">Action</th>
             </tr>
           </thead>
 
